@@ -1,0 +1,24 @@
+.input_wrapper {
+  min-width: max-content;
+  display: flex;
+  background: #45a049;
+
+  form {
+    .input {
+      font-size: 16px;
+      border: 1px solid #ccc;
+      width: 100px;
+    }
+
+    button {
+      min-width: max-content;
+      margin-left: 5px;
+      cursor: pointer;
+
+      &:hover {
+        transition: .3s;
+        background-color: #45a049;
+      }
+    }
+  }
+}
