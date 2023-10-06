@@ -3,6 +3,7 @@ import {Outlet} from "react-router-dom";
 import {AiOutlineAim, AiOutlineMinus, AiOutlinePlus} from "react-icons/ai";
 
 import './mainLayout.scss'
+import {scaleService, updateService} from "../../service";
 
 function MainLayout() {
     const scales = [25, 30, 40, 50, 60, 70, 80, 90, 100, 125, 150];
@@ -13,6 +14,8 @@ function MainLayout() {
 
     const handleScaleChange = (scale: number) => {
         setSelectedScale(scale);
+        scaleService.setScale(scale);
+        updateService.onClick()
     };
 
     const handleFitToScreen = () => {
@@ -94,7 +97,6 @@ function MainLayout() {
                 </div>
             </div>
         </div>
-
     );
 }
 
