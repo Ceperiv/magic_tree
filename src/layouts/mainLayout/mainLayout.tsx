@@ -45,28 +45,30 @@ function MainLayout() {
         cursor: isDragging ? 'grabbing' : 'grab'
     };
 
-    const handleMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        if (e.button === 0 && blockRef.current) {
-            setIsDragging(true);
-            setInitialOffset({
-                x: e.clientX - blockRef.current.getBoundingClientRect().left,
-                y: e.clientY - blockRef.current.getBoundingClientRect().top,
-            });
-        }
-    };
+    // const handleMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    //     if (e.button === 0 && blockRef.current) {
+    //         setIsDragging(true);
+    //         setInitialOffset({
+    //             x: e.clientX - blockRef.current.getBoundingClientRect().left,
+    //             y: e.clientY - blockRef.current.getBoundingClientRect().top,
+    //         });
+    //     } else {
+    //         handleMouseUp()
+    //     }
+    // };
 
-    const handleMouseUp = () => {
-        setIsDragging(false);
-        setInitialOffset(null);
-    };
-
-    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        if (isDragging && blockRef.current && initialOffset) {
-            const offsetX = e.clientX - initialOffset.x;
-            const offsetY = e.clientY - initialOffset.y;
-            blockRef.current.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${selectedScale / 100})`;
-        }
-    };
+    // const handleMouseUp = () => {
+    //     setIsDragging(false);
+    //     setInitialOffset(null);
+    // };
+    //
+    // const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    //     if (isDragging && blockRef.current && initialOffset) {
+    //         const offsetX = e.clientX - initialOffset.x;
+    //         const offsetY = e.clientY - initialOffset.y;
+    //         blockRef.current.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${selectedScale / 100})`;
+    //     }
+    // };
 
     return (
         <div className={'main_layout'}>
@@ -87,10 +89,7 @@ function MainLayout() {
                 <div id={'blockForScale'}
                      className={'blockForScale'}
                      style={blockStyle}
-                     ref={blockRef}
-                     onMouseDown={handleMouseDown}
-                     onMouseUp={handleMouseUp}
-                     onMouseMove={(e) => isDragging && handleMouseMove(e)}>
+                     ref={blockRef}>
                     <Outlet/>
                 </div>
             </div>
