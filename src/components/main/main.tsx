@@ -3,21 +3,24 @@ import {AiOutlineApartment, AiOutlineLeft, AiOutlineRest} from "react-icons/ai";
 
 import './main.scss';
 import {MainInput} from "../../shared";
+import {updateService} from "../../service";
 
 interface InputProps {
     level: number;
     parentId?: number;
-    xxx?: number | null;
-    yyy?: number | null;
+    isUpdate?: number;
+    parrentXprops?: number | null;
+    parrentYprops?: number | null;
 }
 
-const Main: React.FC<InputProps> = ({level, parentId, xxx, yyy}) => {
+const Main: React.FC<InputProps> = ({level, parentId, parrentXprops, parrentYprops, isUpdate}) => {
     const [xx1, setX1] = useState<number>();
     const [yy1, setY1] = useState<number>();
     const [xx2, setX2] = useState<number>();
     const [yy2, setY2] = useState<number>();
     const [childInputs, setChildInputs] = useState<number[]>([]);
     const [isOnDelete, setIsOnDelete] = useState<boolean>(false);
+    const [isChanged, setIsChanged] = useState<number>(1);
 
     const inputRef = useRef<HTMLInputElement>(null);
     const svgRef = useRef<SVGSVGElement | null>(null);
@@ -29,21 +32,21 @@ const Main: React.FC<InputProps> = ({level, parentId, xxx, yyy}) => {
 
     const onDeleteInput = (): void => {
         setIsOnDelete(true)
+        updateService.onClick()
     };
 
     const deleteItem = (index: number) => {
         const newChild = childInputs.filter((_, i) => i !== index);
         setChildInputs(newChild);
-        // setIsOnDelete(false);
+        setIsChanged(Date.now())
+        updateService.onClick()
     };
 
     useEffect(() => {
         const updateLine = () => {
             if (inputRef.current && svgRef.current) {
                 const svgRect = svgRef.current.getBoundingClientRect();
-
                 const inputRect = inputRef.current.getBoundingClientRect();
-                console.log(inputRect)
 
                 const x1 = inputRect.left + inputRect.width / 2 - svgRect.left;
                 const y1 = inputRect.bottom - svgRect.top;
@@ -60,12 +63,22 @@ const Main: React.FC<InputProps> = ({level, parentId, xxx, yyy}) => {
                 if (line && xx2 && yy2) {
                     line.setAttribute('x2', xx2.toString());
                     line.setAttribute('y2', yy2.toString());
-                    if (xxx && yyy) {
-                        line.setAttribute('x1', xxx.toString());
-                        line.setAttribute('y1', yyy.toString());
-
+                    if (parrentXprops && parrentYprops) {
+                        line.setAttribute('x1', parrentXprops.toString());
+                        line.setAttribute('y1', parrentYprops.toString());
                     }
                 }
+
+                childInputs.forEach(id => {
+                    const childInput = document.querySelector(`[data-key="${id}"]`);
+                    const childSvg = childInput?.querySelector('svg');
+                    const childLine = childSvg?.querySelector('line');
+
+                    if (childLine && x1 && y1) {
+                        childLine.setAttribute('x1', x1.toString());
+                        childLine.setAttribute('y1', y1.toString());
+                    }
+                });
             }
         };
 
@@ -75,27 +88,34 @@ const Main: React.FC<InputProps> = ({level, parentId, xxx, yyy}) => {
         return () => {
             window.removeEventListener('resize', updateLine);
         };
-    }, [xx1, xx2, yy1, yy2, yyy, yyy, inputRef?.current?.getBoundingClientRect().x]);
+
+
+    }, [xx1, xx2, yy1, yy2, parrentYprops, parrentYprops, inputRef?.current?.getBoundingClientRect().x, inputRef?.current?.getBoundingClientRect().y, childInputs, isChanged, isOnDelete, parentId, isUpdate]);
 
     return (
+
         <div className="main_container" style={{marginLeft: "10px"}}>
             <div className="input_container">
+                <button style={{display: "none"}}
+                        onClick={() => setIsChanged(Date.now)}
+                        id={`button_${level}`}>
+                    btn_{level}
+                </button>
 
                 <div ref={inputRef}><MainInput onAddInput={onAddInput}/>
 
                 </div>
-
-                {childInputs.length && !isOnDelete ? <button onClick={onDeleteInput}><AiOutlineRest/></button> : null}
-                {isOnDelete && <button onClick={() => setIsOnDelete(false)}><AiOutlineLeft/></button>}
+                {childInputs.length && !isOnDelete ? <button className={'del_btn'} onClick={onDeleteInput}><AiOutlineRest/></button> : null}
+                {isOnDelete && <button className={'back_btn'} onClick={() => setIsOnDelete(false)}><AiOutlineLeft/></button>}
                 {isOnDelete && childInputs.map((value, index) =>
-                    <button onClick={() => deleteItem(index)}><AiOutlineApartment/>{index + 1}</button>
+                    <button className={'del_btn'} onClick={() => deleteItem(index)}><AiOutlineApartment/>{index + 1}</button>
                 )}
             </div>
             <div className="child_container">
                 {childInputs.map((id) => (
                     <div className="child-input-container" key={id}>
                         <div className="line"></div>
-                        <Main level={level + 1} parentId={id} xxx={xx1} yyy={yy1}/>
+                        <Main level={level + 1} parentId={id} parrentXprops={xx1} parrentYprops={yy1} isUpdate={Date.now()}/>
                     </div>
                 ))}
             </div>
@@ -103,12 +123,13 @@ const Main: React.FC<InputProps> = ({level, parentId, xxx, yyy}) => {
                  style={{
                      position: 'absolute',
                      top: 0,
-                     left: 0,
+                     left: '50%',
+                     transform: 'translateX(-50%)',
                      background: "none",
                      zIndex: -1,
                      display: parentId === 1 ? 'none' : "block"
                  }}>
-                <line style={{stroke: 'black', strokeWidth: 2}}/>
+                <line style={{stroke: 'dimgray', strokeWidth: 1}}/>
             </svg>
         </div>
     );

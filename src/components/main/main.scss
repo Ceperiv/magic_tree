@@ -14,6 +14,16 @@
     button {
       min-width: max-content;
     }
+    .del_btn:hover{
+      background: #cb5f5f;
+      transition: .3s;
+      border-color: #d57272;
+    }
+    .back_btn:hover{
+      background: #cbb25f;
+      transition: .3s;
+      border-color: #d5be72;
+    }
   }
 
   .child_container {

@@ -3,6 +3,7 @@ import {SubmitHandler, useForm} from 'react-hook-form';
 import {AiOutlineCheck, AiOutlineEdit, AiOutlinePlus} from "react-icons/ai";
 
 import './mainInput.scss';
+import {updateService} from "../../service";
 
 interface MainInputProps {
     onAddInput: (inputValue: string) => void;
@@ -18,6 +19,7 @@ const MainInput: React.FC<MainInputProps> = ({onAddInput}) => {
 
     const onSubmit: SubmitHandler<FormValues> = (data) => {
         onAddInput(data.inputValue);
+        updateService.onClick()
     };
 
     const onDisabled = () => {
@@ -35,10 +37,10 @@ const MainInput: React.FC<MainInputProps> = ({onAddInput}) => {
                        type="text" {...register('inputValue', {required: true})} />
 
                 {!isInputDisabled ?
-                    <button disabled={!formState.isValid} onClick={onDisabled}><AiOutlineCheck/></button> : null}
+                    <button className={'on_click_btn'} disabled={!formState.isValid} onClick={onDisabled}><AiOutlineCheck/></button> : null}
                 {isInputDisabled ? <button><AiOutlinePlus/></button> : null}
             </form>
-            <button onClick={onEditInput}><AiOutlineEdit/></button>
+            <button className={'edit_btn'} onClick={onEditInput}><AiOutlineEdit/></button>
         </div>
     );
 };

@@ -1,7 +1,6 @@
 .input_wrapper {
   min-width: max-content;
   display: flex;
-  background: #45a049;
 
   form {
     .input {
@@ -12,13 +11,18 @@
 
     button {
       min-width: max-content;
-      margin-left: 5px;
       cursor: pointer;
 
       &:hover {
         transition: .3s;
         background-color: #45a049;
+        border-color: #45a049;
       }
     }
+  }
+  .edit_btn:hover{
+    background: #5fcbae;
+    transition: .3s;
+    border-color: #88e0cf;
   }
 }
