@@ -48,10 +48,10 @@ const Main: React.FC<InputProps> = ({level, parentId, parrentXprops, parrentYpro
                 const svgRect = svgRef.current.getBoundingClientRect();
                 const inputRect = inputRef.current.getBoundingClientRect();
 
-                const x1 = inputRect.left + inputRect.width / 2 - svgRect.left;
-                const y1 = inputRect.bottom - svgRect.top;
-                const x2 = inputRect.left + inputRect.width / 2 - svgRect.left;
-                const y2 = inputRect.top - svgRect.top;
+                const x1 = inputRect.left + inputRect.width / 2;
+                const y1 = inputRect.bottom;
+                const x2 = inputRect.left + inputRect.width / 2;
+                const y2 = inputRect.top;
 
                 setX1(x1);
                 setY1(y1);
