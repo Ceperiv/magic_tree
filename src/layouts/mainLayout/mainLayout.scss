@@ -4,6 +4,7 @@
   .zoomable_container {
     position: relative;
 
+
     .zoomable_block {
       z-index: 99;
       position: absolute;
@@ -14,5 +15,18 @@
 
     .blockForScale {
     }
+  }
+}
+
+@media (max-width: 776px) {
+  .zoomable_block {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 462px) {
+  .main_layout > .zoomable_container > .zoomable_block {
+    right: 3px;
   }
 }
